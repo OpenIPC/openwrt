@@ -6,7 +6,6 @@
 #
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/image.mk
-# include $(INCLUDE_DIR)/host.mk
 
 KERNEL_LOADADDR = 0x80008000
 
@@ -21,15 +20,15 @@ KDIR_TMP:=$(KDIR)/tmp
 VMLINUX:=$(BIN_DIR)/$(IMG_PREFIX)-vmlinux
 UIMAGE:=$(BIN_DIR)/$(IMG_PREFIX)-uImage
 
-define Build/prepend-with-elf
-    mv $@ $@.old
-    dd if=$(KDIR)/loader.elf of=$@ bs=131072 conv=sync
-    cat $@.old >> $@
-endef
+#define Build/prepend-with-elf
+#    mv $@ $@.old
+#    dd if=$(KDIR)/loader.elf of=$@ bs=131072 conv=sync
+#    cat $@.old >> $@
+#endef
 
-define Build/tailed-bin
-    echo $(BIN_TAIL) >> $@
-endef
+#define Build/tailed-bin
+#    echo $(BIN_TAIL) >> $@
+#endef
 
 define Image/mkfs/squashfs
     ( $(STAGING_DIR_HOST)/bin/mksquashfs4 $(TARGET_DIR) $(KDIR)/root.squashfs -nopad -noappend -root-owned -comp $(SQUASHFSCOMP) $(SQUASHFSOPT) -processors $(if $(CONFIG_PKG_BUILD_JOBS),$(CONFIG_PKG_BUILD_JOBS),1) && \
@@ -121,7 +120,6 @@ endef
 define NewDevice-dts
   define Device/$(1)
     $$(Device/hi35xx-default-16m)
-    DEVICE_DTS := $(8)
     KERNEL_SIZE:=4096k
     KERNEL := kernel-bin | append-dtb | uImage none
     KERNEL_INITRAMFS := kernel-bin | append-dtb
@@ -131,74 +129,18 @@ define NewDevice-dts
     CPU_MODEL := $(5)
     UBOOTOFFSET := $(6)
     DEVICE_PROFILE := $(7)
+    DEVICE_DTS := $(8)
   endef
   ifeq ($(PROFILE),$(7))
     TARGET_DEVICES += $(1)
   endif # ifeq ($(PROFILE),$(7))
 endef
 
-ifeq ($(SUBTARGET),16cv200)
-    $(eval $(call NewDevice,default,DEFAULT,DEFAULT,ALL,HI3516CV200,320k,DEFAULT)) # @flyrouter
-    $(eval $(call NewDevice,jvt-s323h16vf,JVT-S323H16VF,JVT S323H16VF,IMX323,HI3516CV200,320k,JVT_S323H16VF)) # @flyrouter
-    $(eval $(call NewDevice-dts,hjt-hi3516cv2,HJT-HI3516CV2,HJT HI3516CV2,IMX323,HI3516CV200,320k,HJT_HI3516CV2)) # @ussh
-endif # ifeq ($(SUBTARGET),16cv200)
-
-
-
-ifeq ($(SUBTARGET),16cv300)
-    $(eval $(call NewDevice,default,DEFAULT,DEFAULT,ALL,HI3516CV300,320k,DEFAULT)) # @flyrouter
-endif # ifeq ($(SUBTARGET),16cv300)
-
-
-
-ifeq ($(SUBTARGET),16ev100)
-    $(eval $(call NewDevice,default,DEFAULT,DEFAULT,ALL,HI3516EV100,320k,DEFAULT)) # @flyrouter
-endif # ifeq ($(SUBTARGET),16ev100)
-
-
-
-ifeq ($(SUBTARGET),18cv100)
-    $(eval $(call NewDevice,default,DEFAULT,DEFAULT,ALL,HI3518CV100,320k,DEFAULT)) # @flyrouter
-    $(eval $(call NewDevice,beward-ds06m,BW-DS06M,Beward DS06M,IMX138,HI3518CV100,512k,BEWARD_DS06M)) # @ussh
-    $(eval $(call NewDevice,zmodo-zhixu1dmac,Zmodo-ZH-IXU1D-MAC,Zmodo ZH-IXU1D-MAC,OV9712,HI3518CV100,512k,ZMODO_ZH_IXU1D_MAC)) # @ussh
-endif # ifeq ($(SUBTARGET),18cv100)
-
-
-
-ifeq ($(SUBTARGET),18ev100)
-    $(eval $(call NewDevice,default,DEFAULT,DEFAULT,ALL,HI3518EV100,320k,DEFAULT)) # @flyrouter
-    $(eval $(call NewDevice,jvt-ip225ev1,JVT-IP-225E-V1,JVT IP-225E-V1,IMX225,HI3518EV100,512k,JVT_IP_225E_V1)) # @ussh
-endif # ifeq ($(SUBTARGET),18ev100)
-
-
-
 ifeq ($(SUBTARGET),18ev200)
-    $(eval $(call NewDevice,default,DEFAULT,DEFAULT,ALL,HI3518EV200,320k,DEFAULT)) # @flyrouter
-    $(eval $(call NewDevice,jvt-s130h18v,JVT-S130H18V,JVT S130H18V,AR0130,HI3518EV200,320k,JVT_S130H18V)) # @flyrouter
-    $(eval $(call NewDevice,jvt-s135h18vf,JVT-S135H18VF,JVT S135H18VF,SC1135,HI3518EV200,320k,JVT_S135H18VF)) # @flyrouter
-    $(eval $(call NewDevice,switcam-hs303,SWITCAM-HS303,SWITCAM HS303,JXF22,HI3518EV200,320k,SWITCAM_HS303)) # @flyrouter
-    $(eval $(call NewDevice,xm-blk18ev-0035-0042,XM-BLK18EV-0035-0042,XM BLK18EV-0035-0042,SC2135,HI3518EV200,320k,XM_BLK18EV_0035_0042)) # @flyrouter
+    $(eval $(call NewDevice-dts,default,DEFAULT,DEFAULT,ALL,HI3518EV200,320k,DEFAULT)) # @flyrouter
     $(eval $(call NewDevice-dts,ctwalker-smc01-wifi,CTWALKER-SMC01,CTWALKER SMC01 WIFI,OV9732,HI3518EV200,320k,CTWALKER_SMC01_WIFI,hi3518ev20x-demb)) # @ussh
     $(eval $(call NewDevice-dts,ctwalker-smc01-4g,CTWALKER-SMC01,CTWALKER SMC01 4G,OV9732,HI3518EV200,320k,CTWALKER_SMC01_4G,hi3518ev20x-demb)) # @ussh
 endif # ifeq ($(SUBTARGET),18ev200)
-
-
-
-ifeq ($(SUBTARGET),18ev201)
-    $(eval $(call NewDevice,default,DEFAULT,DEFAULT,ALL,HI3518EV201,320k,DEFAULT)) # @flyrouter
-endif # ifeq ($(SUBTARGET),18ev201)
-
-
-
-ifeq ($(SUBTARGET),20dv100)
-    $(eval $(call NewDevice,default,DEFAULT,DEFAULT,ALL,HI3520DV100,320k,DEFAULT)) # @flyrouter
-endif # ifeq ($(SUBTARGET),20dv100)
-
-ifeq ($(SUBTARGET),20dv200)
-    $(eval $(call NewDevice,default,DEFAULT,DEFAULT,ALL,HI3520DV200,320k,DEFAULT)) # @flyrouter
-endif # ifeq ($(SUBTARGET),20dv200)
-
-
 
 define Image/Build/squashfs
 	cp $(KDIR)/root.squashfs $(BIN_DIR)/$(IMG_PREFIX)-root.squashfs
