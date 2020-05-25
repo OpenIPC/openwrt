@@ -142,6 +142,12 @@ ifeq ($(SUBTARGET),18ev200)
     $(eval $(call NewDevice-dts,ctwalker-smc01-4g,CTWALKER-SMC01,CTWALKER SMC01 4G,OV9732,HI3518EV200,320k,CTWALKER_SMC01_4G,hi3518ev20x-demb)) # @ussh
 endif # ifeq ($(SUBTARGET),18ev200)
 
+ifeq ($(SUBTARGET),16cv200)
+    $(eval $(call NewDevice-dts,default,DEFAULT,DEFAULT,ALL,HI3518EV200,320k,DEFAULT)) # @flyrouter
+    $(eval $(call NewDevice-dts,ctwalker-smc02-wifi,CTWALKER-SMC02,CTWALKER SMC02 WIFI,IMX323,HI3516CV200,320k,CTWALKER_SMC02_WIFI,hi3518ev20x-demb)) # @ussh
+    $(eval $(call NewDevice-dts,ctwalker-smc02-4g,CTWALKER-SMC02,CTWALKER SMC02 4G,IMX323,HI3516CV200,320k,CTWALKER_SMC02_4G,hi3518ev20x-demb)) # @ussh
+endif # ifeq ($(SUBTARGET),18ev200)
+
 define Image/Build/squashfs
 	cp $(KDIR)/root.squashfs $(BIN_DIR)/$(IMG_PREFIX)-root.squashfs
 	dd if=$(KDIR)/root.$(1) of=$(BIN_DIR)/$(IMG_PREFIX)-$(1).img bs=131072 conv=sync

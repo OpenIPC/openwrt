@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 ARCH:=arm
 BOARD:=hi35xx
 BOARDNAME:=Hisilicon HI35xx devices
-SUBTARGETS:=18ev200
+SUBTARGETS:=18ev200 16cv200
 DEVICE_TYPE:=ipc
 
 FEATURES:=squashfs ramdisk rtc usb gpio low_mem initramfs

@@ -5,8 +5,8 @@
 # See /LICENSE for more information.
 #
 
-define Profile/CTWALKER_SMC01_4G
-  NAME:=CTWALKER-SMC01-4G
+define Profile/CTWALKER_SMC02_4G
+  NAME:=CTWALKER-SMC02-4G
   PACKAGES:= \
 	kmod-usb-ohci kmod-usb2 kmod-usb-ledtrig-usbport \
 	busybox block-mount ca-certificates kmod-nls-base \
@@ -25,7 +25,7 @@ define Profile/CTWALKER_SMC01_4G
 	hisi-osdrv2-kmod hisi-osdrv2-lib hisi-osdrv2-sensor usb-modeswitch
 endef
 
-define Profile/CTWALKER_SMC01_4G/Description
-	CT IP camera with 3g/4g, model: SMC01, based on HI3518EV200
+define Profile/CTWALKER_SMC02_4G/Description
+	CT IP camera with 3g/4g, model: SMC02, based on HI3516CV200
 endef
-$(eval $(call Profile,CTWALKER_SMC01_4G))
+$(eval $(call Profile,CTWALKER_SMC02_4G))
