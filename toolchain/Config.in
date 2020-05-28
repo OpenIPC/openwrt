@@ -250,7 +250,7 @@ choice
 	config LIBC_USE_UCLIBC
 		select USE_UCLIBC
 		bool "Use uClibc"
-		depends on BROKEN || arc
+		depends on BROKEN || arc || TARGET_hi35xx
 
 	config LIBC_USE_MUSL
 		select USE_MUSL
