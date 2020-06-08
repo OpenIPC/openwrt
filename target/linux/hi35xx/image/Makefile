@@ -73,7 +73,7 @@ define Build/sysupgrade-header
 endef
 
 define Device/hi35xx-default
-    IMAGES := sysupgrade.bin factory.bin
+    IMAGES := sysupgrade.bin factory.bin dtb
     IMAGE_PREFIX := $(IMG_PREFIX)-$(1)
     KERNEL_PREFIX := $(IMG_PREFIX)-$(1)
     KERNEL_NAME = zImage
@@ -88,6 +88,7 @@ define Device/hi35xx-default
     FILESYSTEMS = $(filter-out jffs2-%,$(TARGET_FILESYSTEMS)) jffs2-$$(BLOCKSIZE)
     IMAGE/sysupgrade.bin := append-kernel $${KERNEL_SIZE} | pad-to 64k | append-rootfs $${ROOT_FS_SIZE} | sysupgrade-header
     IMAGE/factory.bin := append-kernel $${KERNEL_SIZE} | pad-to 64k | append-rootfs $${ROOT_FS_SIZE} | check-size $$$$(IMAGE_SIZE)
+    IMAGE/dtb := install-dtb
 endef
 
 define Device/hi35xx-default-16m
@@ -137,13 +138,13 @@ define NewDevice-dts
 endef
 
 ifeq ($(SUBTARGET),18ev200)
-    $(eval $(call NewDevice-dts,default,DEFAULT,DEFAULT,ALL,HI3518EV200,320k,DEFAULT)) # @flyrouter
+    $(eval $(call NewDevice-dts,default,DEFAULT,DEFAULT,ALL,HI3518EV200,320k,DEFAULT,hi3518ev20x-demb)) # @flyrouter
     $(eval $(call NewDevice-dts,ctwalker-smc01-wifi,CTWALKER-SMC01,CTWALKER SMC01 WIFI,OV9732,HI3518EV200,320k,CTWALKER_SMC01_WIFI,hi3518ev20x-demb)) # @ussh
     $(eval $(call NewDevice-dts,ctwalker-smc01-4g,CTWALKER-SMC01,CTWALKER SMC01 4G,OV9732,HI3518EV200,320k,CTWALKER_SMC01_4G,hi3518ev20x-demb)) # @ussh
 endif # ifeq ($(SUBTARGET),18ev200)
 
 ifeq ($(SUBTARGET),16cv200)
-    $(eval $(call NewDevice-dts,default,DEFAULT,DEFAULT,ALL,HI3518EV200,320k,DEFAULT)) # @flyrouter
+    $(eval $(call NewDevice-dts,default,DEFAULT,DEFAULT,ALL,HI3518EV200,320k,DEFAULT,hi3518ev20x-demb)) # @flyrouter
     $(eval $(call NewDevice-dts,ctwalker-smc02-wifi,CTWALKER-SMC02,CTWALKER SMC02 WIFI,IMX323,HI3516CV200,320k,CTWALKER_SMC02_WIFI,hi3518ev20x-demb)) # @ussh
     $(eval $(call NewDevice-dts,ctwalker-smc02-4g,CTWALKER-SMC02,CTWALKER SMC02 4G,IMX323,HI3516CV200,320k,CTWALKER_SMC02_4G,hi3518ev20x-demb)) # @ussh
 endif # ifeq ($(SUBTARGET),18ev200)
